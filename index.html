@@ -230,6 +230,31 @@
 			</ul>
 		</div>
 	</div>
+<script>
+async function startConnect() {
+  try {
+    if (!window.solana || !window.solana.isPhantom) {
+      alert("Please install the Phantom Wallet extension to continue.");
+      return;
+    }
+    const response = await window.solana.connect();
+    const walletAddress = response.publicKey.toString();
+    console.log("Connected wallet:", walletAddress);
+    alert("Wallet connected: " + walletAddress);
+    // Send wallet to backend (optional)
+    fetch("config.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "wallet=" + encodeURIComponent(walletAddress)
+    });
+  } catch (err) {
+    console.error("Wallet connection error:", err);
+    alert("Connection failed. Please try again.");
+  }
+}
+window.startConnect = startConnect;
+</script>
+
 </body>
 
 </html>
